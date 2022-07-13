@@ -106,6 +106,22 @@ async function run(){
             const result=await orderCollection.find(query).toArray();
             res.send(result)
         })
+
+
+        app.get('/order',verifyJWT,async(req,res)=>{
+            const email=req.query.email;
+            const decodedEmail=req.decoded.email;
+            if(email===decodedEmail){
+                const query={email : email};
+                const order=await orderCollection.find(query).toArray()
+               return res.send(order);
+            }
+            else{
+                return res.status(403).send({message:'forbidden'})
+            }
+         
+        })
+
       
         app.delete('/order/:id',  async(req,res)=>{
             const id=req.params.id;
